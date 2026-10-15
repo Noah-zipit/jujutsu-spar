@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>JUJUTSU SPAR — Stick Sorcerers</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="stage">
+  <canvas id="game" width="960" height="540"></canvas>
+
+  <!-- TITLE -->
+  <div id="titleScreen" class="screen">
+    <div class="logo-wrap">
+      <div class="logo-sub">STICK SORCERERS</div>
+      <h1 class="logo">JUJUTSU<br>SPAR</h1>
+      <div class="logo-tag">1v1 &middot; CURSED TECHNIQUES &middot; DOMAIN EXPANSIONS</div>
+    </div>
+    <div class="menu">
+      <button class="btn big" id="btnCpu">VS CPU</button>
+      <button class="btn big" id="btn2p">2P VERSUS</button>
+      <button class="btn" id="btnHow">HOW TO PLAY</button>
+    </div>
+    <div id="howPanel" class="how hidden">
+      <div class="how-col">
+        <h3>PLAYER 1</h3>
+        <p><b>A / D</b> move &nbsp;<b>W</b> jump &nbsp;<b>S</b> block</p>
+        <p><b>J</b> light &nbsp;<b>K</b> heavy &nbsp;<b>L</b> cursed technique</p>
+        <p><b>U</b> DOMAIN EXPANSION (full CE)</p>
+      </div>
+      <div class="how-col">
+        <h3>PLAYER 2</h3>
+        <p><b>&larr; / &rarr;</b> move &nbsp;<b>&uarr;</b> jump &nbsp;<b>&darr;</b> block</p>
+        <p><b>1</b> light &nbsp;<b>2</b> heavy &nbsp;<b>3</b> cursed technique</p>
+        <p><b>0</b> DOMAIN EXPANSION (full CE)</p>
+      </div>
+      <p class="how-note">Land hits to charge Cursed Energy. Techniques cost 35 CE. A full bar unleashes your Domain — inside it, your opening barrage cannot miss. Heavy hits can spark a BLACK FLASH for double damage.</p>
+    </div>
+  </div>
+
+  <!-- CHARACTER SELECT -->
+  <div id="selectScreen" class="screen hidden">
+    <h2 class="select-title">CHOOSE YOUR SORCERER</h2>
+    <div id="pickTurn" class="pick-turn p1">PLAYER 1 — CHOOSE</div>
+    <div id="cardGrid" class="card-grid"></div>
+    <div class="select-foot">
+      <button class="btn small" id="btnBackTitle">BACK</button>
+      <span class="hint" id="selectHint">Click a fighter, or use arrow keys + Enter</span>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="resultScreen" class="screen hidden result">
+    <div id="winnerText" class="winner">VOID WINS</div>
+    <div class="menu">
+      <button class="btn big" id="btnRematch">REMATCH</button>
+      <button class="btn" id="btnChange">CHANGE FIGHTERS</button>
+      <button class="btn" id="btnTitle2">TITLE</button>
+    </div>
+  </div>
+
+  <!-- TOUCH CONTROLS -->
+  <div id="touch" class="touch hidden">
+    <div class="t-cluster">
+      <button class="tbtn" data-k="left">&#9664;</button>
+      <button class="tbtn" data-k="right">&#9654;</button>
+      <button class="tbtn" data-k="jump">&#9650;</button>
+      <button class="tbtn" data-k="block">&#128737;</button>
+    </div>
+    <div class="t-cluster">
+      <button class="tbtn atk" data-k="light">L</button>
+      <button class="tbtn atk" data-k="heavy">H</button>
+      <button class="tbtn atk" data-k="tech">CT</button>
+      <button class="tbtn atk dom" data-k="domain">DE</button>
+    </div>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
