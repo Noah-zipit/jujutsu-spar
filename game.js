@@ -472,19 +472,23 @@ requestAnimationFrame(loop);
 
 /* ---------------- menus ---------------- */
 const $ = id=>document.getElementById(id);
-/* Mobile: jump to fullscreen + lock landscape on any start tap (user gesture required by browsers) */
+/* Fullscreen + landscape lock on start gestures. NOTE: no device-type gate —
+   Ashar's modded Chromium reports a PC signature, so pointer/touch media
+   queries lie. A game going fullscreen on its start button is normal. */
 function goFullscreenLandscape(){
   try{
-    if(!window.matchMedia || !matchMedia('(pointer: coarse)').matches) return;
     const lock = ()=>{ try{ if(screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(()=>{}); }catch(e){} };
     if(document.fullscreenElement){ lock(); return; }
     const el = document.documentElement;
     if(el.requestFullscreen){ const p = el.requestFullscreen(); if(p && p.then) p.then(lock).catch(()=>{}); else lock(); }
+    else if(el.webkitRequestFullscreen){ el.webkitRequestFullscreen(); lock(); }
     else lock();
   }catch(e){}
 }
+document.addEventListener('pointerdown', ()=>{ if(phase==='title' || phase==='select') goFullscreenLandscape(); });
 function showOnly(id){ ['titleScreen','selectScreen','resultScreen'].forEach(s=>$(s).classList.toggle('hidden', s!==id)); if(!id) ['titleScreen','selectScreen','resultScreen'].forEach(s=>$(s).classList.add('hidden')); }
 $('btnHow').onclick = ()=>{ audio(); $('howPanel').classList.toggle('hidden'); };
+$('btnFs').onclick = ()=>{ audio(); goFullscreenLandscape(); };
 $('btnCpu').onclick = ()=>{ audio(); goFullscreenLandscape(); mode='cpu'; openSelect(); };
 $('btn2p').onclick = ()=>{ audio(); goFullscreenLandscape(); mode='2p'; openSelect(); };
 let pickStage = 0, pickA = -1, cardCtxs = [], cardFighters = [];
