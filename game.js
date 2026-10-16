@@ -472,10 +472,21 @@ requestAnimationFrame(loop);
 
 /* ---------------- menus ---------------- */
 const $ = id=>document.getElementById(id);
+/* Mobile: jump to fullscreen + lock landscape on any start tap (user gesture required by browsers) */
+function goFullscreenLandscape(){
+  try{
+    if(!window.matchMedia || !matchMedia('(pointer: coarse)').matches) return;
+    const lock = ()=>{ try{ if(screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(()=>{}); }catch(e){} };
+    if(document.fullscreenElement){ lock(); return; }
+    const el = document.documentElement;
+    if(el.requestFullscreen){ const p = el.requestFullscreen(); if(p && p.then) p.then(lock).catch(()=>{}); else lock(); }
+    else lock();
+  }catch(e){}
+}
 function showOnly(id){ ['titleScreen','selectScreen','resultScreen'].forEach(s=>$(s).classList.toggle('hidden', s!==id)); if(!id) ['titleScreen','selectScreen','resultScreen'].forEach(s=>$(s).classList.add('hidden')); }
 $('btnHow').onclick = ()=>{ audio(); $('howPanel').classList.toggle('hidden'); };
-$('btnCpu').onclick = ()=>{ audio(); mode='cpu'; openSelect(); };
-$('btn2p').onclick = ()=>{ audio(); mode='2p'; openSelect(); };
+$('btnCpu').onclick = ()=>{ audio(); goFullscreenLandscape(); mode='cpu'; openSelect(); };
+$('btn2p').onclick = ()=>{ audio(); goFullscreenLandscape(); mode='2p'; openSelect(); };
 let pickStage = 0, pickA = -1, cardCtxs = [], cardFighters = [];
 function openSelect(){ phase='select'; pickStage=0; pickA=-1; showOnly('selectScreen'); buildCards(); $('pickTurn').textContent='PLAYER 1 — CHOOSE'; $('pickTurn').className='pick-turn p1'; }
 function buildCards(){
@@ -508,6 +519,7 @@ function chooseCard(i, el){
   } else if(pickStage===1){ cards.forEach((c2,j)=>c2.classList.toggle('picked2', j===i)); startMatch(pickA, i); }
 }
 function startMatch(a, b){
+  goFullscreenLandscape();
   p1 = makeFighter(a, 0, false); p2 = makeFighter(b, 1, mode==='cpu');
   wins=[0,0]; roundNum=1; projectiles=[]; particles=[]; bolts=[]; popups=[]; scheduled=[]; domain=null;
   timer=99*60; phase='intro'; introT=0; showOnly(null);
@@ -520,7 +532,7 @@ function showResult(){
   showOnly('resultScreen'); $('touch').classList.add('hidden');
 }
 $('btnBackTitle').onclick = ()=>{ audio(); phase='title'; showOnly('titleScreen'); };
-$('btnRematch').onclick = ()=>{ audio(); showOnly(null); resetRound(false); $('touch').classList.toggle('hidden', !('ontouchstart' in window)); };
+$('btnRematch').onclick = ()=>{ audio(); goFullscreenLandscape(); showOnly(null); resetRound(false); $('touch').classList.toggle('hidden', !('ontouchstart' in window)); };
 $('btnChange').onclick = ()=>{ audio(); showOnly(null); openSelect(); };
 $('btnTitle2').onclick = ()=>{ audio(); phase='title'; showOnly('titleScreen'); };
 function onKeyMenu(code){
